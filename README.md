@@ -44,9 +44,9 @@ By default, the `launchd` will back up the configured PostgreSQL database every 
 
 ## Restoring from backup
 
-The `./pg_dump` command is the equivalent of the "Backup" button in the Resolve GUI's database manager window. The `.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `.backup` files would also be handy even just to migrate to a different PostgreSQL server.
+The `./pg_dump` command in the `bash` script is the equivalent of the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate databases to a different PostgreSQL server.
 
-These `.backup` files can be easily restored via the Resolve GUI's database manager window.
+These `*.backup` files can be easily restored via the Resolve GUI's database manager window.
 
 ## Loading the agent into `launchd`
 
