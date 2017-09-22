@@ -40,7 +40,7 @@ I recommend duplicating one `plist` file and one `bash` script per individual Po
 
 ## Configuration options
 
-By default, the `launchd` will back up the configured PostgreSQL database every 3 hours [every 10800 seconds]. This value can be changed in the `plist` file.
+By default, the`plist` file for `launchd` will back up the configured PostgreSQL database every 3 hours [every 10800 seconds]. This value can be changed in the `plist` file.
 
 ## Restoring from backup
 
