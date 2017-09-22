@@ -42,17 +42,17 @@ I recommend duplicating one `plist` file and one `bash` script per individual Po
 
 By default, the`plist` file for `launchd` will back up the configured PostgreSQL database every 3 hours [every 10800 seconds]. This value can be changed in the `plist` file.
 
-## Restoring from backup
-
-The `./pg_dump` command in the `bash` script is the equivalent of the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate databases to a different PostgreSQL server.
-
-These `*.backup` files can be easily restored via the Resolve GUI's database manager window.
-
 ## Loading the agent into `launchd`
 
 Once you have the files configured and installed into the correct directories, you can *either* reboot your computer, *or* you can use `launchctl` to load the `plist` file into `launchd` and start the agent without rebooting:
 
 	launchctl load ~/Library/LaunchAgents/yourdbname.plist
 	launchctl start com.resolve.backup.yourdbname
-	
+
+## Restoring from backup
+
+The `./pg_dump` command used in the `bash` script is the equivalent of pressing the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate databases to a different PostgreSQL server.
+
+These `*.backup` files can be easily restored via the Resolve GUI's database manager window. Just press the "Restore" button and select the `*.backup` file you wish to restore.
+
 Enjoy!
