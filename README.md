@@ -9,8 +9,6 @@ This project has three files that are designed to be modified and installed onto
 * PostgreSQL 9.5.9
 * pgAdmin III
 	
-These files are designed to be installed to the boot drive of the Mac that is the PostgreSQL server, not a remote machine on the network.
-
 ## Background
 
 Jathavan Sriram wrote [a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use `./pg_dump` inside of pgAdmin in `bash`, instead of having to use the `psql` shell. 
@@ -25,6 +23,8 @@ Three files are provided in this respository:
 * A template `plist` for `launchd`, which should be modified and put into `~/Library/LaunchAgents` with permissions `755`
 * A template `bash` script
 * A `.pgpass` file, which she be put into `~` with permissions `600`
+
+These files are designed to be installed to the boot drive of the Mac that is the PostgreSQL server, not a remote machine on the network.
 
 ## Installation tips
 
