@@ -5,7 +5,7 @@ This project has three files that are designed to be modified and installed onto
 
 ## System requirements:
 * macOS Sierra 10.12.6 (16G1036)
-* Blackmagic Design DaVinci Resolve 14.0.0.078, 14.0.1.008, or 14.1.0.018
+* Blackmagic Design DaVinci Resolve 14.0.0.078, 14.0.1.008, 14.1.0.018, or 14.1.1.005
 * PostgreSQL 9.5.9
 * pgAdmin III
 	
