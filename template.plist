@@ -10,7 +10,7 @@
     <array>
 
 <!-- In the following line, put the path of the bash script in between the <string></string> tags. Tip: launchd plist files don't require \ to escape spaces in the names of files or folders. -->
-        <string>/Users/username/Google Drive/resolve-backups/yourdbname.sh</string>
+        <string>/Users/username/resolve-backup-scripts/yourdbname.sh</string>
     </array>
     <key>StartInterval</key>
 
