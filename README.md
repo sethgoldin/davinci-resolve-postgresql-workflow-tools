@@ -1,4 +1,4 @@
-# backup-resolve-postgresql
+# davinci-resolve-postgresql-workflow-tools
 ## Automatic backups for Resolve 14's PostgreSQL databases
 
 This project has three files that are designed to be modified and installed onto a macOS Sierra 10.12.6 system.
