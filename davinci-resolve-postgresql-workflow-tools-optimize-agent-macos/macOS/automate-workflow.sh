@@ -67,7 +67,7 @@ echo "    <key>Label</key>" >> backup-"$dbname".plist
 echo "    <string>com.resolve.backup.$dbname</string>" >> backup-"$dbname".plist
 echo "    <key>ProgramArguments</key>" >> backup-"$dbname".plist
 echo "    <array>" >> backup-"$dbname".plist
-echo "        <string>bash</string>" >> backup-"$dbname".plist
+echo "        <string>/bin/bash</string>" >> backup-"$dbname".plist
 echo "        <string>-c</string>" >> backup-"$dbname".plist
 echo "        <string>~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-$dbname.sh</string>" >> backup-"$dbname".plist
 echo "    </array>" >> backup-"$dbname".plist
@@ -87,7 +87,7 @@ echo "    <key>Label</key>" >> optimize-"$dbname".plist
 echo "    <string>com.resolve.optimize.$dbname</string>" >> optimize-"$dbname".plist
 echo "    <key>ProgramArguments</key>" >> optimize-"$dbname".plist
 echo "    <array>" >> optimize-"$dbname".plist
-echo "        <string>bash</string>" >> optimize-"$dbname".plist
+echo "        <string>/bin/bash</string>" >> optimize-"$dbname".plist
 echo "        <string>-c</string>" >> optimize-"$dbname".plist
 echo "        <string>~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-$dbname.sh</string>" >> optimize-"$dbname".plist
 echo "    </array>" >> optimize-"$dbname".plist
