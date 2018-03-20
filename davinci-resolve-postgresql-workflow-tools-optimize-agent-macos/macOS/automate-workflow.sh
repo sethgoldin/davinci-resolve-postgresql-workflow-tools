@@ -22,7 +22,7 @@ mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools
 # Let's also check to see if there are separate directories for "backup" and "optimize" scripts, and if they don't exist, let's create them.
 # We're making separate directories for the different kinds of scripts just to keep everything straight.
 
-cd ~/DaVinci Resolve\ PostgreSQL\ Workflow\ Tools
+cd ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools
 mkdir -p backup
 mkdir -p optimize
 
@@ -44,5 +44,13 @@ if [ ! -f ~/.pgpass ]; then
 	touch ~/.pgpass
 	echo "localhost:5432:*:postgres:DaVinci" > ~/.pgpass
 fi
+
+# Let's move onto the "optimize" script:
+cd ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
+touch optimize-"$dbname".sh
+echo "#!/bin/bash" >> optimize-"$dbname".sh
+echo "cd /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport" >> optimize-"$dbname".sh
+echo "./reindexdb --host localhost --username postgres $dbname --no-password --echo" >> optimize-"$dbname".sh
+echo "./vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password" >> optimize-"$dbname".sh
 
 
