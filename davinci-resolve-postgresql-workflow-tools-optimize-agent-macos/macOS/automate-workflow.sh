@@ -53,4 +53,47 @@ echo "cd /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport" >> optimiz
 echo "./reindexdb --host localhost --username postgres $dbname --no-password --echo" >> optimize-"$dbname".sh
 echo "./vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password" >> optimize-"$dbname".sh
 
+# With both shell scripts created, we can create, load, and start the two different launchd user agents.
+
+# Let's create the "backup" agent first.
+cd ~/Library/LaunchAgents
+touch backup-"$dbname".plist
+
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" >> backup-"$dbname".plist
+echo "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> backup-"$dbname".plist
+echo "<plist version=\"1.0\">" >> backup-"$dbname".plist
+echo "<dict>" >> backup-"$dbname".plist
+echo "    <key>Label</key>" >> backup-"$dbname".plist
+echo "    <string>com.resolve.backup.$dbname</string>" >> backup-"$dbname".plist
+echo "    <key>ProgramArguments</key>" >> backup-"$dbname".plist
+echo "    <array>" >> backup-"$dbname".plist
+echo "        <string>bash</string>" >> backup-"$dbname".plist
+echo "        <string>-c</string>" >> backup-"$dbname".plist
+echo "        <string>~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-$dbname.sh</string>" >> backup-"$dbname".plist
+echo "    </array>" >> backup-"$dbname".plist
+echo "    <key>StartInterval</key>" >> backup-"$dbname".plist
+echo "    <integer>10800</integer>" >> backup-"$dbname".plist
+echo "</dict>" >> backup-"$dbname".plist
+echo "</plist>" >> backup-"$dbname".plist
+
+# Now let's create the "optimize" agent.
+cd ~/Library/LaunchAgents
+touch optimize-"$dbname".plist
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" >> optimize-"$dbname".plist
+echo "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> optimize-"$dbname".plist
+echo "<plist version=\"1.0\">" >> optimize-"$dbname".plist
+echo "<dict>" >> optimize-"$dbname".plist
+echo "    <key>Label</key>" >> optimize-"$dbname".plist
+echo "    <string>com.resolve.optimize.$dbname</string>" >> optimize-"$dbname".plist
+echo "    <key>ProgramArguments</key>" >> optimize-"$dbname".plist
+echo "    <array>" >> optimize-"$dbname".plist
+echo "        <string>bash</string>" >> optimize-"$dbname".plist
+echo "        <string>-c</string>" >> optimize-"$dbname".plist
+echo "        <string>~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-$dbname.sh</string>" >> optimize-"$dbname".plist
+echo "    </array>" >> optimize-"$dbname".plist
+echo "    <key>StartInterval</key>" >> optimize-"$dbname".plist
+echo "    <integer>86400</integer>" >> optimize-"$dbname".plist
+echo "</dict>" >> optimize-"$dbname".plist
+echo "</plist>" >> optimize-"$dbname".plist
+
 
