@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+
+<!-- In the following line, name your launchd process in between the <string></string> tags with something as `com.resolve.backup.yourdbname` -->
+    <string>com.resolve.backup.yourdbname</string>
+    <key>ProgramArguments</key>
+    <array>
+
+<!-- In the following line, put the path of the bash script in between the <string></string> tags. Tip: launchd plist files don't require \ to escape spaces in the names of files or folders. -->
+        <string>/Users/username/resolve-backup-scripts/yourdbname.sh</string>
+    </array>
+    <key>StartInterval</key>
+
+<!-- In the following line, the variable between the <integer></integer> tags is how often the script will run, in seconds. The default here is 10800, which means that the PostgreSQL database will be backed up every three hours. -->
+    <integer>10800</integer>
+</dict>
+</plist>
+
