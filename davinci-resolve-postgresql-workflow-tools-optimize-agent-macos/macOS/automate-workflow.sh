@@ -96,4 +96,14 @@ echo "    <integer>86400</integer>" >> optimize-"$dbname".plist
 echo "</dict>" >> optimize-"$dbname".plist
 echo "</plist>" >> optimize-"$dbname".plist
 
+# Now the "backup" and "optimize" scripts and agents are in place.
+# All we have to do is load these agents into launchd and start them with launchctl.
 
+# First, let's load and start the backup agent.
+cd ~/Library/LaunchAgents
+launchctl load backup-$dbname.plist
+launchctl start com.backup.resolve.$dbname
+
+# Lastly, let's load and start the optimize agent.
+launchctl load optimize-$dbname.plist
+launchctl start com.resolve.optimize.$dbname
