@@ -37,7 +37,7 @@ touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
 # Now, let's fill it in:
 cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
 #!/bin/bash
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/$dbname_\`date \"+%Y_%m_%d_%H_%M\"\`.backup --format=custom --verbose --no-password
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
@@ -56,7 +56,11 @@ cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
 EOF
 
-# With both shell scripts created, we can create, load, and start the two different launchd user agents.
+# Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 555:
+chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
+chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
+
+# With both shell scripts created with the proper permissions, we can create, load, and start the two different launchd user agents.
 
 # Let's create the "backup" agent first.
 touch ~/Library/LaunchAgents/backup-"$dbname".plist
