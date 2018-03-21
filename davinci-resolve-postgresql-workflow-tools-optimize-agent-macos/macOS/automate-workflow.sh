@@ -56,7 +56,7 @@ cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
 EOF
 
-# Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 555:
+# Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 755:
 chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
 chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
 
@@ -73,9 +73,7 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
     <string>com.resolve.backup.$dbname</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/bash</string>
-        <string>-c</string>
-        <string>"$HOME/DaVinci Resolve PostgreSQL Workflow Tools/backup/backup-$dbname.sh"</string>
+        <string>$HOME/DaVinci Resolve PostgreSQL Workflow Tools/backup/backup-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>10800</integer>
@@ -94,9 +92,7 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
     <string>com.resolve.optimize.$dbname</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/bash</string>
-        <string>-c</string>
-        <string>"$HOME/DaVinci Resolve PostgreSQL Workflow Tools/optimize/optimize-$dbname.sh"</string>
+        <string>$HOME/DaVinci Resolve PostgreSQL Workflow Tools/optimize/optimize-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>86400</integer>
