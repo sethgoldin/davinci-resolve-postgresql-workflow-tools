@@ -22,28 +22,29 @@ mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools
 # Let's also check to see if there are separate directories for "backup" and "optimize" scripts, and if they don't exist, let's create them.
 # We're making separate directories for the different kinds of scripts just to keep everything straight.
 
-cd ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools
-mkdir -p backup
-mkdir -p optimize
+mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup
+mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
 
 # With those folders created, let's go ahead and create the two different shell scripts that will be referenced by the launchd XML plist files.
 
 # First, let's create the "backup" shell script:
 
-cd backup
-touch backup-"$dbname".sh
+touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
 
 # Now, let's fill it in:
-echo "#!/bin/bash" >> backup-"$dbname".sh
-echo "cd /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport" >> backup-"$dbname".sh
-echo "./pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/$dbname_\`date \"+%Y_%m_%d_%H_%M\"\`.backup --format=custom --verbose --no-password" >> backup-"$dbname".sh
+cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
+#!/bin/bash
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/$dbname_\`date \"+%Y_%m_%d_%H_%M\"\`.backup --format=custom --verbose --no-password
+EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
-cd ~
 if [ ! -f ~/.pgpass ]; then
 	touch ~/.pgpass
 	echo "localhost:5432:*:postgres:DaVinci" > ~/.pgpass
+# 	We also need to make sure that that .pgpass file has the correct permissions of 600:
+	chmod 600 ~/.pgpass
 fi
+
 
 # Let's move onto the "optimize" script:
 cd ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
