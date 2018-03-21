@@ -73,9 +73,7 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
     <string>com.resolve.backup.$dbname</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/sh</string>
-        <string>-c</string>
-        <string>$HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
+        <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>10800</integer>
@@ -94,9 +92,7 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
     <string>com.resolve.optimize.$dbname</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/sh</string>
-        <string>-c</string>
-        <string>$HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh</string>
+        <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>86400</integer>
