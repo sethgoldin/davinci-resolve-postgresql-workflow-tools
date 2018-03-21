@@ -65,9 +65,9 @@ chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$db
 # Let's create the "backup" agent first.
 touch ~/Library/LaunchAgents/backup-"$dbname".plist
 cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
     <key>Label</key>
     <string>com.resolve.backup.$dbname</string>
@@ -75,7 +75,7 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>~/DaVinci Resolve PostgreSQL Workflow Tools/backup/backup-$dbname.sh</string>
+        <string>"$HOME/DaVinci Resolve PostgreSQL Workflow Tools/backup/backup-$dbname.sh"</string>
     </array>
     <key>StartInterval</key>
     <integer>10800</integer>
@@ -86,9 +86,9 @@ EOF
 # Now let's create the "optimize" agent.
 touch ~/Library/LaunchAgents/optimize-"$dbname".plist
 cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
     <key>Label</key>
     <string>com.resolve.optimize.$dbname</string>
@@ -96,7 +96,7 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>~/DaVinci Resolve PostgreSQL Workflow Tools/optimize/optimize-$dbname.sh</string>
+        <string>"$HOME/DaVinci Resolve PostgreSQL Workflow Tools/optimize/optimize-$dbname.sh"</string>
     </array>
     <key>StartInterval</key>
     <integer>86400</integer>
