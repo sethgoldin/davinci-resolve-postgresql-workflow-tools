@@ -17,25 +17,25 @@ read -p "Did you enter the path of the backup directory correctly? (y/n): " conf
 # Now $backupDirectory will be the folder loaded into the shell script where the backups are going to go
 
 # Let's check if a ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/ folder exists, and if it doesn't, let's create one:
-mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools
+mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools
 
 # Let's also check to see if there are separate directories for "backup" and "optimize" scripts, and if they don't exist, let's create them.
 # We're making separate directories for the different kinds of scripts just to keep everything straight.
 
-mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup
-mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow \Tools/optimize
+mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow \Tools/optimize
 
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
-chmod -R 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup
-chmod -R 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
+chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 
 # With those folders created with the correct permissions, let's go ahead and create the two different shell scripts that will be referenced by the launchd XML plist files.
 
 # First, let's create the "backup" shell script:
-touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
+touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 
 # Now, let's fill it in:
-cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
+cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password
 EOF
@@ -49,16 +49,16 @@ if [ ! -f ~/.pgpass ]; then
 fi
 
 # Let's move onto the "optimize" script:
-touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
-cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
+touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/reindexdb --host localhost --username postgres $dbname --no-password --echo
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
 EOF
 
 # Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 755:
-chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
-chmod 755 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
+chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 
 # With both shell scripts created with the proper permissions, we can create, load, and start the two different launchd user agents.
 
@@ -73,7 +73,7 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
     <string>com.resolve.backup.$dbname</string>
     <key>ProgramArguments</key>
     <array>
-        <string>Users/$USER/DaVinci Resolve PostgreSQL Workflow Tools/backup/backup-$dbname.sh</string>
+        <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>10800</integer>
@@ -92,7 +92,7 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
     <string>com.resolve.optimize.$dbname</string>
     <key>ProgramArguments</key>
     <array>
-        <string>Users/$USER/DaVinci Resolve PostgreSQL Workflow Tools/optimize/optimize-$dbname.sh</string>
+        <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
     <integer>86400</integer>
