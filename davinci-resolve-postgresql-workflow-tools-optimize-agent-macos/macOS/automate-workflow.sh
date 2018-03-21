@@ -26,8 +26,8 @@ mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
-chmod -R 777 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
-chmod -R 777 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
+chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 
 # With those folders created with the correct permissions, let's go ahead and create the two different shell scripts that will be referenced by the launchd XML plist files.
 
@@ -73,6 +73,8 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
     <string>com.resolve.backup.$dbname</string>
     <key>ProgramArguments</key>
     <array>
+        <string>/bin/sh</string>
+        <string>-c</string>
         <string>$HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
@@ -92,6 +94,8 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
     <string>com.resolve.optimize.$dbname</string>
     <key>ProgramArguments</key>
     <array>
+        <string>/bin/sh</string>
+        <string>-c</string>
         <string>$HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
