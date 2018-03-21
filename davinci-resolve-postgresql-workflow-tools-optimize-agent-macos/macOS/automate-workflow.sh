@@ -25,10 +25,13 @@ mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools
 mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup
 mkdir -p ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
 
-# With those folders created, let's go ahead and create the two different shell scripts that will be referenced by the launchd XML plist files.
+# We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
+chmod -R 777 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup
+chmod -R 777 ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
+
+# With those folders created with the correct permissions, let's go ahead and create the two different shell scripts that will be referenced by the launchd XML plist files.
 
 # First, let's create the "backup" shell script:
-
 touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-"$dbname".sh
 
 # Now, let's fill it in:
@@ -97,14 +100,17 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
 </plist>
 EOF
 
-# Now the "backup" and "optimize" scripts and agents are in place.
-# All we have to do is load these agents into launchd and start them with launchctl.
+# These plist files inside ~/Library/LaunchAgents each need permissions of 755.
+chmod 755 ~/Library/LaunchAgents/backup-"$dbname".plist
+chmod 755 ~/Library/LaunchAgents/optimize-"$dbname".plist
+
+# Now, the "backup" and "optimize" scripts and agents are in place.
+# All we need to do is load these agents into launchd and start them with launchctl.
 
 # First, let's load and start the backup agent.
-cd ~/Library/LaunchAgents
-launchctl load backup-$dbname.plist
+launchctl load ~/Library/LaunchAgents/backup-$dbname.plist
 launchctl start com.backup.resolve.$dbname
 
 # Lastly, let's load and start the optimize agent.
-launchctl load optimize-$dbname.plist
+launchctl load ~/Library/LaunchAgents/optimize-$dbname.plist
 launchctl start com.resolve.optimize.$dbname
