@@ -52,8 +52,8 @@ fi
 touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
 cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./reindexdb --host localhost --username postgres $dbname --no-password --echo
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/reindexdb --host localhost --username postgres $dbname --no-password --echo
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
 EOF
 
 # Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 555:
