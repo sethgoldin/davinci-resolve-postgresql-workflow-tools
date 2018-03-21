@@ -45,57 +45,57 @@ if [ ! -f ~/.pgpass ]; then
 	chmod 600 ~/.pgpass
 fi
 
-
 # Let's move onto the "optimize" script:
-cd ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize
-touch optimize-"$dbname".sh
-echo "#!/bin/bash" >> optimize-"$dbname".sh
-echo "cd /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport" >> optimize-"$dbname".sh
-echo "./reindexdb --host localhost --username postgres $dbname --no-password --echo" >> optimize-"$dbname".sh
-echo "./vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password" >> optimize-"$dbname".sh
+touch ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
+cat << EOF > ~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-"$dbname".sh
+#!/bin/bash
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./reindexdb --host localhost --username postgres $dbname --no-password --echo
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/./vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
+EOF
 
 # With both shell scripts created, we can create, load, and start the two different launchd user agents.
 
 # Let's create the "backup" agent first.
-cd ~/Library/LaunchAgents
-touch backup-"$dbname".plist
-
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" >> backup-"$dbname".plist
-echo "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> backup-"$dbname".plist
-echo "<plist version=\"1.0\">" >> backup-"$dbname".plist
-echo "<dict>" >> backup-"$dbname".plist
-echo "    <key>Label</key>" >> backup-"$dbname".plist
-echo "    <string>com.resolve.backup.$dbname</string>" >> backup-"$dbname".plist
-echo "    <key>ProgramArguments</key>" >> backup-"$dbname".plist
-echo "    <array>" >> backup-"$dbname".plist
-echo "        <string>/bin/bash</string>" >> backup-"$dbname".plist
-echo "        <string>-c</string>" >> backup-"$dbname".plist
-echo "        <string>~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/backup/backup-$dbname.sh</string>" >> backup-"$dbname".plist
-echo "    </array>" >> backup-"$dbname".plist
-echo "    <key>StartInterval</key>" >> backup-"$dbname".plist
-echo "    <integer>10800</integer>" >> backup-"$dbname".plist
-echo "</dict>" >> backup-"$dbname".plist
-echo "</plist>" >> backup-"$dbname".plist
+touch ~/Library/LaunchAgents/backup-"$dbname".plist
+cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+    <key>Label</key>
+    <string>com.resolve.backup.$dbname</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>~/DaVinci Resolve PostgreSQL Workflow Tools/backup/backup-$dbname.sh</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>10800</integer>
+</dict>
+</plist>
+EOF
 
 # Now let's create the "optimize" agent.
-cd ~/Library/LaunchAgents
-touch optimize-"$dbname".plist
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" >> optimize-"$dbname".plist
-echo "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" >> optimize-"$dbname".plist
-echo "<plist version=\"1.0\">" >> optimize-"$dbname".plist
-echo "<dict>" >> optimize-"$dbname".plist
-echo "    <key>Label</key>" >> optimize-"$dbname".plist
-echo "    <string>com.resolve.optimize.$dbname</string>" >> optimize-"$dbname".plist
-echo "    <key>ProgramArguments</key>" >> optimize-"$dbname".plist
-echo "    <array>" >> optimize-"$dbname".plist
-echo "        <string>/bin/bash</string>" >> optimize-"$dbname".plist
-echo "        <string>-c</string>" >> optimize-"$dbname".plist
-echo "        <string>~/DaVinci\ Resolve\ PostgreSQL\ Workflow\ Tools/optimize/optimize-$dbname.sh</string>" >> optimize-"$dbname".plist
-echo "    </array>" >> optimize-"$dbname".plist
-echo "    <key>StartInterval</key>" >> optimize-"$dbname".plist
-echo "    <integer>86400</integer>" >> optimize-"$dbname".plist
-echo "</dict>" >> optimize-"$dbname".plist
-echo "</plist>" >> optimize-"$dbname".plist
+touch ~/Library/LaunchAgents/optimize-"$dbname".plist
+cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+    <key>Label</key>
+    <string>com.resolve.optimize.$dbname</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>~/DaVinci Resolve PostgreSQL Workflow Tools/optimize/optimize-$dbname.sh</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>86400</integer>
+</dict>
+</plist>
+EOF
 
 # Now the "backup" and "optimize" scripts and agents are in place.
 # All we have to do is load these agents into launchd and start them with launchctl.
