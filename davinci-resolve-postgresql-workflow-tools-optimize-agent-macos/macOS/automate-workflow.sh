@@ -41,11 +41,7 @@ touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 # Now, let's fill it in:
 cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
-# Let's check to make sure that the monthly log file exists, and create it if it doesn't
-if [ ! -f ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log ]; then
-	touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
-fi
-# Let's do the backup and log to the monthly backup if the backup is successful.
+# Let's perform the backup and log to the monthly backup if the backup is successful.
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \
 echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
@@ -62,17 +58,13 @@ fi
 touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
-# Let's check to make sure that the monthly log file exists, and create it if it doesn't
-if [ ! -f ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log ]; then
-	touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
-fi
 # Let's optimize the database and log to the monthly backup if the backup is successful.
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/reindexdb --host localhost --username postgres $dbname --no-password --echo && \
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \
+/Library/PostgreSQL/9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \
+/Library/PostgreSQL/9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \
 echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
-# Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 755:
+# Now each individual shell script needs to have their permissions set properly for launchd to read and execute the scripts, so let's use 755:
 chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 
@@ -87,10 +79,8 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
 <dict>
     <key>Label</key>
     <string>com.resolve.backup.$dbname</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
-    </array>
+    <key>Program</key>
+        <string>$HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
     <key>StartInterval</key>
     <integer>60</integer>
 </dict>
@@ -106,10 +96,8 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
 <dict>
     <key>Label</key>
     <string>com.resolve.optimize.$dbname</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh</string>
-    </array>
+    <key>Program</key>
+        <string>$HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh</string>
     <key>StartInterval</key>
     <integer>180</integer>
 </dict>
@@ -125,7 +113,7 @@ chmod 755 ~/Library/LaunchAgents/optimize-"$dbname".plist
 
 # First, let's load and start the backup agent.
 launchctl load ~/Library/LaunchAgents/backup-${dbname}.plist
-launchctl start com.backup.resolve.${dbname}
+launchctl start com.resolve.backup.${dbname}
 
 # Lastly, let's load and start the optimize agent.
 launchctl load ~/Library/LaunchAgents/optimize-${dbname}.plist
