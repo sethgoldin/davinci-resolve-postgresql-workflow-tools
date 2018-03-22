@@ -25,9 +25,13 @@ mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools
 mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 
+# Let's also make a folder for log files
+mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
+chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
 # With those folders created with the correct permissions, let's go ahead and create the two different shell scripts that will be referenced by the launchd XML plist files.
 
@@ -37,7 +41,13 @@ touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 # Now, let's fill it in:
 cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password
+# Let's check to make sure that the monthly log file exists, and create it if it doesn't
+if [ ! -f ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log ]; then
+	touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log
+fi
+# Let's do the backup and log to the monthly backup if the backup is successful.
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \
+echo "${dbname} was backed up at $(date "+%Y_%m_%d_%H_%M")." > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
@@ -52,8 +62,14 @@ fi
 touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/reindexdb --host localhost --username postgres $dbname --no-password --echo
-/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password
+# Let's check to make sure that the monthly log file exists, and create it if it doesn't
+if [ ! -f ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log ]; then
+	touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log
+fi
+# Let's optimize the database and log to the monthly backup if the backup is successful.
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/reindexdb --host localhost --username postgres $dbname --no-password --echo && \
+/Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \
+echo "${dbname} was optimized at $(date "+%Y_%m_%d_%H_%M")." > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log
 EOF
 
 # Each individual shell script needs to have the permissions set properly for launchd to read and execute, so let's use 755:
