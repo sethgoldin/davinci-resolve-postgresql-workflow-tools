@@ -76,7 +76,7 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
         <string>Users/$USER/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh</string>
     </array>
     <key>StartInterval</key>
-    <integer>10800</integer>
+    <integer>3600</integer>
 </dict>
 </plist>
 EOF
