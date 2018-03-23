@@ -27,7 +27,7 @@ To verify that everything is in working order, you can periodically check the lo
 * macOS Sierra 10.12.6 (16G1036 or 16G1212)
 * Blackmagic Design DaVinci Resolve Studio (14.0.0.078, 14.0.1.008, 14.1.0.018, 14.1.1.005, 14.2.0.012, 14.2.1.007, or 14.3.0.005)
 * PostgreSQL 9.5.4 or later (as provided by the DaVinci Resolve Studio installer)
-* pgAdmin III
+* pgAdmin III (as provided by the DaVinci Resolve Studio installer)
 	
 ## Background
 
