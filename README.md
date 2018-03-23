@@ -4,7 +4,7 @@
 This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio. The script will let you effortlessly load and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases.
 
 ## How to use
-1. Download the file `` to your `~/Downloads` folder.
+1. Download the file `macos-automate-workflow.sh` to your `~/Downloads` folder.
 2. In Terminal, execute the following commands to run the script:
 ```
 chmod 755 ~/Downloads/macos-automate-workflow.sh
