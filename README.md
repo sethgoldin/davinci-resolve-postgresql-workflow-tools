@@ -1,7 +1,7 @@
 # DaVinci Resolve PostgreSQL Workflow Tools
 ## Effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve 14 Studio's PostgreSQL databases
 
-This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio.
+This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio. The script will let you effortlessly load and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases.
 
 ## How to use
 1. Download the file `` to your `~/Downloads` folder.
