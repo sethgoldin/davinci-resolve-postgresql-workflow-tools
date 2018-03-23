@@ -1,23 +1,48 @@
 # DaVinci Resolve PostgreSQL Workflow Tools
-## Automatic backups for Resolve 14's PostgreSQL databases
+## Tools to effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve 14 Studio PostgreSQL databases
 
-This project has three files that are designed to be modified and installed onto a macOS Sierra 10.12.6 system.
+This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 system that's running as a PostgreSQL server for DaVinci Resolve Studio 14.
+
+## How to use
+1. Download the file `automate-workflow.sh` to your `~/Downloads` folder.
+2. In Terminal, execute the following commands to run the script:
+```
+chmod 755 ~/Downloads/automate-workflow.sh
+~/Downloads/automate-workflow.sh
+```
+
+The script will then:
+1. Prompt you for the name of your PostgreSQL database;
+2. Prompt you for the path of the folder where your backups will go;
+3. Prompt you for how often you want to back the database up, in seconds; and
+4. Prompt you for how often you want to optimize the database, in seconds.
+
+Once you run through this script, you will be automatically backing up and optimizing your database according to whatever parameters you inputted.
+
+The script creates macOS `launchd` user agents, so these automatic backups and automatic database optimizations will continue on schedule, even after the system is rebooted. There is no need to run the script more than once per database.
+
+To verify that everything is in working order, you can periodically check the log files located in `~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
+
+N.B. Because the script generates `launchd` user agents, the backups and optimizations will only occur while you are logged into the same account that you were using when you ran the script.
 
 ## System requirements:
 * macOS Sierra 10.12.6 (16G1036 or 16G1212)
-* Blackmagic Design DaVinci Resolve 14.0.0.078, 14.0.1.008, 14.1.0.018, 14.1.1.005, 14.2.0.012, 14.2.1.007, or 14.3.0.005
-* PostgreSQL 9.5.4 or later
+* Blackmagic Design DaVinci Resolve Studio (14.0.0.078, 14.0.1.008, 14.1.0.018, 14.1.1.005, 14.2.0.012, 14.2.1.007, or 14.3.0.005)
+* PostgreSQL 9.5.4 or later (as provided by the DaVinci Resolve Studio installer)
 * pgAdmin III
 	
 ## Background
 
 Jathavan Sriram wrote [a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use `./pg_dump` inside of pgAdmin in `bash`, instead of having to use the `psql` shell. 
 
-The core insights from his 2014 article still apply, but two crucial changes need to be made for modern systems:
+The core insights from his 2014 article still apply, but several crucial changes need to be made for modern systems:
 1. Apple [has deprecated `cron` in favor of `launchd`](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html). 
 2. Starting with DaVinci Resolve 12.5.4 on macOS, DaVinci Resolve has been using PostgreSQL 9.5.
+3. The locations of `reindexdb` and `vacuumdb` in PostgreSQL 9.5.4 have changed.
 
-## What's included in this repository
+## What this script does
+
+This script creates and installs all the files necessary to have `launchd` continuously backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. `launchd` is macOS's built-in tool
 
 Three files are provided in this respository:
 * A template `plist` for `launchd`, which should be modified and put into `~/Library/LaunchAgents` with permissions `755`
