@@ -23,7 +23,7 @@ The script creates macOS `launchd` user agents, so these automatic backups and a
 
 To verify that everything is in working order, you can periodically check the log files located in `~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
 
-N.B. Because the script generates `launchd` user agents, the backups and optimizations will only occur while you are logged into the same account that you were using when you ran the script.
+N.B. Because the script generates `launchd` user agents, the backups and optimizations will only occur while logged into the same account from which the script was run.
 
 ## System requirements:
 * macOS Sierra 10.12.6 (16G1036 or 16G1212)
