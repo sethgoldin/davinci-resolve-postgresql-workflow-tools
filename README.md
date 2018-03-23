@@ -46,6 +46,8 @@ This script creates and installs all the files necessary to have `launchd` regul
 
 The `.pgpass` file assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
 
+Make sure that you create the directory where your backups are going to go *before* running the script.
+
 The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
 
 Because the script generates `launchd` user agents, the backups and optimizations will only occur while logged into the same account from which the script was run. Stay logged into the same account.
