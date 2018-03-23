@@ -17,7 +17,7 @@ The script will then:
 3. Prompt you for how often you want to back the database up, in seconds; and
 4. Prompt you for how often you want to optimize the database, in seconds.
 
-Once you run through this script, you will be automatically backing up and optimizing your database according to whatever parameters you inputted.
+Once you run through this script, you will be automatically backing up and optimizing your database according to whatever parameters you entered.
 
 The script creates macOS `launchd` user agents, so these automatic backups and automatic database optimizations will continue on schedule, even after the system is rebooted. It's neither necessary nor desirable to run the script more than once per individual Resolve database.
 
