@@ -61,7 +61,10 @@ chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
-# With those folders created with the correct permissions, let's go ahead and create the two different shell scripts that will be executed by the launchd XML files.
+# Let's also check to make sure that $backupDirectory exists, and if not, let's create it.
+mkdir -p $backupDirectory
+
+# With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
 # First, let's create the "backup" shell script:
 touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
@@ -148,4 +151,5 @@ launchctl load ~/Library/LaunchAgents/optimize-${dbname}.plist
 launchctl start com.resolve.optimize.${dbname}
 
 echo "Congratulations, $dbname will be backed up every $backupFrequency seconds and optimized every $optimizeFrequency seconds."
-echo "You can check to make sure that everything is being backed up and optimized properly by looking at the log files in: ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs"
+echo "You can check to make sure that everything is being backed up and optimized properly by periodically looking at the log files in: ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs"
+echo "Have a great day!"
