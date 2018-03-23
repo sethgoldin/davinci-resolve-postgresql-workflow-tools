@@ -61,9 +61,6 @@ chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
-# Let's also check to make sure that $backupDirectory exists, and if not, let's create it.
-mkdir -p $backupDirectory
-
 # With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
 # First, let's create the "backup" shell script:
