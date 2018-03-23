@@ -1,7 +1,7 @@
 # DaVinci Resolve PostgreSQL Workflow Tools
 ## Tools to effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve 14 Studio PostgreSQL databases
 
-This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 system that's running as a PostgreSQL server for DaVinci Resolve Studio 14.
+This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio.
 
 ## How to use
 1. Download the file `automate-workflow.sh` to your `~/Downloads` folder.
@@ -19,7 +19,7 @@ The script will then:
 
 Once you run through this script, you will be automatically backing up and optimizing your database according to whatever parameters you inputted.
 
-The script creates macOS `launchd` user agents, so these automatic backups and automatic database optimizations will continue on schedule, even after the system is rebooted. There is no need to run the script more than once per database.
+The script creates macOS `launchd` user agents, so these automatic backups and automatic database optimizations will continue on schedule, even after the system is rebooted. It's neither necessary nor desirable to run the script more than once per individual Resolve database.
 
 To verify that everything is in working order, you can periodically check the log files located in `~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
 
@@ -33,50 +33,26 @@ N.B. Because the script generates `launchd` user agents, the backups and optimiz
 	
 ## Background
 
-Jathavan Sriram wrote [a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use `./pg_dump` inside of pgAdmin in `bash`, instead of having to use the `psql` shell. 
+Jathavan Sriram wrote [a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use pgAdmin III tools in `bash`, instead of having to use the `psql` shell.
 
 The core insights from his 2014 article still apply, but several crucial changes need to be made for modern systems:
 1. Apple [has deprecated `cron` in favor of `launchd`](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html). 
 2. Starting with DaVinci Resolve 12.5.4 on macOS, DaVinci Resolve has been using PostgreSQL 9.5.
-3. The locations of `reindexdb` and `vacuumdb` in PostgreSQL 9.5.4 have changed.
+3. The locations of `reindexdb` and `vacuumdb` in PostgreSQL 9.5.4 have changed from what they were in PostgreSQL 8.4.
 
 ## What this script does
 
-This script creates and installs all the files necessary to have `launchd` continuously backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. `launchd` is macOS's built-in tool
-
-Three files are provided in this respository:
-* A template `plist` for `launchd`, which should be modified and put into `~/Library/LaunchAgents` with permissions `755`
-* A template `bash` script
-* A `.pgpass` file, which she be put into `~` with permissions `600`
-
-These files are designed to be installed to the boot drive of the Mac that is the PostgreSQL server, not a remote machine on the network.
+This script creates and installs all the files necessary to have `launchd` regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. [`launchd`](https://en.wikipedia.org/wiki/Launchd) is a a unified service-management framework that starts, stops, and manages daemons, applications, processes, and scripts in macOS.
 
 ## Installation tips
 
-The `.pgpass` file assumes that your password for the PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual. If you've set up your PostgreSQL database with a different password, use that.
-	
-There are comments within the template `plist` file and template `bash` file that explain which parameters to modify.
+The `.pgpass` file assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
 
-These files can be installed to and run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
-
-## Style guide
-
-I recommend duplicating one `plist` file and one `bash` script per individual PostgreSQL database, and naming these files identically to their individual PostgreSQL databases--the same names that are created from within Resolve's GUI. Wherever you see `yourdbname` in the templates, use the same names assigned from Resolve's GUI.
-
-## Configuration options
-
-By default, the`plist` file for `launchd` will back up the configured PostgreSQL database every 3 hours [every 10800 seconds]. This value can be changed in the `plist` file.
-
-## Loading the agent into `launchd`
-
-Once you have the files configured and installed into the correct directories, you can *either* reboot your computer, *or* you can use `launchctl` to load the `plist` file into `launchd` and start the agent without rebooting:
-
-	launchctl load ~/Library/LaunchAgents/yourdbname.plist
-	launchctl start com.resolve.backup.yourdbname
+The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
 
 ## Restoring from backup
 
-The `./pg_dump` command used in the `bash` script is the equivalent of pressing the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate databases to a different PostgreSQL server.
+The `pg_dump` command used in this `bash` script is the equivalent of pressing the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate databases from one PostgreSQL server to another.
 
 These `*.backup` files can be easily restored via the Resolve GUI's database manager window. Just press the "Restore" button and select the `*.backup` file you wish to restore.
 
