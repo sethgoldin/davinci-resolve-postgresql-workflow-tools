@@ -69,7 +69,7 @@ touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 # Now, let's fill it in:
 cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
-# Let's perform the backup and log to the monthly backup if the backup is successful.
+# Let's perform the backup and log to the monthly log file if the backup is successful.
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
 echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
@@ -86,7 +86,7 @@ fi
 touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
-# Let's optimize the database and log to the monthly backup if the backup is successful.
+# Let's optimize the database and log to the monthly log file if the optimization is successful.
 /Library/PostgreSQL/9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
 /Library/PostgreSQL/9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
 echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
