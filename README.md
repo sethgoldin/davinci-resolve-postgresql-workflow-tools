@@ -5,10 +5,13 @@ This is a `bash` script that is designed to be run on a macOS Sierra 10.12.6 sys
 
 ## How to use
 1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
-2. In Terminal, execute the following commands to run the script:
+2. In Terminal, execute the following command to run the script:
+```
+~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-automate-workflow.sh
+```
+If you run into a permissions error, change the permissions on the file by running the following command first:
 ```
 chmod 755 ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-automate-workflow.sh
-~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-automate-workflow.sh
 ```
 
 The script will then:
