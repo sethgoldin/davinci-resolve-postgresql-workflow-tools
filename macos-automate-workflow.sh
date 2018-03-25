@@ -10,7 +10,7 @@ read -p "Is that correct? Enter y or n: " confirm && [[ $confirm == [yY] || $con
 # Now "$dbname" will work as a variable in subsequent paths.
 
 # Let's prompt the user for the "backup directory," which is where the backups from pg_dump will go:
-read -p "Into which directory should the database backups go? " backupDirectory
+read -p "Into which directory should the database backups go? You can drag-and-drop a folder from Finder into Terminal. " backupDirectory
 
 # Let's also allow the user to confirm that what they've typed in for the backup directory is correct:
 echo "You entered: $backupDirectory"
