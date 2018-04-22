@@ -61,6 +61,9 @@ chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
+# With a fresh installation of macOS, the ~/Library/LaunchAgents isn't automatically created, so let's check to make sure that it exists, and create it if it doesn't already:
+mkdir -p ~/Library/LaunchAgents
+
 # With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
 # First, let's create the "backup" shell script:
