@@ -3,7 +3,7 @@
 
 This is a `bash` script that is designed to be run on a **Mac** or **Linux** system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio.
 
-On macOS, the script will let you effortlessly load and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases. On CentOS Linux, the script uses `systemd`.
+On macOS, the script will let you effortlessly load and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases. On CentOS Linux, the script creates `systemd` units and timers.
 
 ## How to use on macOS
 1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
