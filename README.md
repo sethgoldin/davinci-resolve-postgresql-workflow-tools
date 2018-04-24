@@ -30,9 +30,9 @@ To verify that everything is in working order, you can periodically check the lo
 
 ## How to use on CentOS
 1. From a regular admin user account, download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
-2. In Terminal, execute the following command to run the script:
+2. In Terminal, from within your `~/Downloads` folder, execute the script:
 ```
-sudo ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/centos-automate-workflow.sh
+sudo ./centos-automate-workflow.sh
 ```
 
 The script will then:
