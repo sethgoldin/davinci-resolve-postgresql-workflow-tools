@@ -1,9 +1,9 @@
 # DaVinci Resolve PostgreSQL Workflow Tools
 ## Effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve 14 Studio's PostgreSQL databases
 
-This is a `bash` script that is designed to be run on a macOS or Linux system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio.
+This is a `bash` script that is designed to be run on a **Mac** or **Linux** system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio.
 
-On macOS, the script will let you effortlessly load and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases. On Linux, the script uses `systemd`.
+On macOS, the script will let you effortlessly load and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases. On CentOS Linux, the script uses `systemd`.
 
 ## How to use on macOS
 1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
@@ -29,21 +29,20 @@ The script creates macOS `launchd` user agents, so these automatic backups and a
 To verify that everything is in working order, you can periodically check the log files located in `~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
 
 ## How to use on CentOS
-1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
+1. From a regular admin user account, download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
 2. In Terminal, execute the following command to run the script:
 ```
 sudo ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/centos-automate-workflow.sh
-```
-If you run into a permissions error, change the permissions on the file by running the following command first:
-```
-chmod 755 ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/centos-automate-workflow.sh
 ```
 
 The script will then:
 1. Prompt you for the name of your PostgreSQL database;
 2. Prompt you for the path of the folder where your backups will go;
+    - Be sure to use the absolute path
 3. Prompt you for how often you want to back the database up; and
+    - Be sure to use `systemd` notation like `1h` or `3h` or `1d`, etc.
 4. Prompt you for how often you want to optimize the database.
+    - Be sure to use `systemd` notation like `1h` or `3h` or `1d`, etc.
 
 Once you run through this script, you will be automatically backing up and optimizing your database according to whatever parameters you entered.
 
@@ -79,7 +78,7 @@ On macOS, this script creates and installs all the files necessary to have `laun
 
 On CentOS Linux, this script creates and installs all the files necessary to have [`systemd`](https://en.wikipedia.org/wiki/Systemd) regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses.
 
-## Special considerations
+## Notes on configurations
 
 The `.pgpass` file assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
 
@@ -103,6 +102,8 @@ local   all     all                      trust
 host    all     all     127.0.0.1/32     trust
 host    all     all     ::1/128          trust
 ```
+
+The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
 
 ## Restoring from backup
 
