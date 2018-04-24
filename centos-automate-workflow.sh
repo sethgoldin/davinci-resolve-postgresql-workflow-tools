@@ -10,7 +10,7 @@ read -p "Is that correct? Enter y or n: " confirm && [[ $confirm == [yY] || $con
 # Now "$dbname" will work as a variable in subsequent paths.
 
 # Let's prompt the user for the "backup directory," which is where the backups from pg_dump will go:
-read -p "Into which directory should the database backups go? " backupDirectory
+read -p "Into which directory should the database backups go? Use absolute paths! " backupDirectory
 
 # Let's also allow the user to confirm that what they've typed in for the backup directory is correct:
 echo "You entered: $backupDirectory"
@@ -28,7 +28,7 @@ read -p "How often would you like to backup the database? " backupFrequency
 read -p "You entered that you want to backup your database every "$backupFrequency". Is that correct? Enter y or n: " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
 # Let's allow the user to specify how often to optimize the database.
-# Let's also provide a link to more information on systemd time syntax.
+# Let's also provide another link to more information on systemd time syntax.
 echo "See https://www.freedesktop.org/software/systemd/man/systemd.time.html for time syntax."
 echo "Suggestion: 1d"
 read -p "How often would you like to optimize the database? " optimizeFrequency
@@ -36,34 +36,34 @@ read -p "How often would you like to optimize the database? " optimizeFrequency
 # Let's have the user confirm that they entered the correct optimizing frequency:
 read -p "You entered that you want to optimize your database every "$optimizeFrequency". Is that correct? Enter y or n: " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
-# Let's check if a ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools folder exists, and if it doesn't, let's create one:
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools
+# Let's check if a /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools folder exists, and if it doesn't, let's create one:
+mkdir -p /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools
 
 # Let's also check to see if there are separate directories for "backup" and "optimize" scripts, and if they don't exist, let's create them.
 # We're making separate directories for the different kinds of scripts just to keep everything clean and organized.
 
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
+mkdir -p /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+mkdir -p /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 
 # Let's also make a folder for log files
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+mkdir -p /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
-chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
-chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
-chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
+chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
 # With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
 # First, let's create the "backup" shell script:
-touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 
 # Now, let's fill it in:
-cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
 # Let's perform the backup and log to the monthly log file if the backup is successful.
 /usr/pgsql-9.5/bin/pg_dump --host localhost --username postgres $dbname --blobs --file "$backupDirectory"/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
-echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
@@ -75,18 +75,18 @@ if [ ! -f ~/.pgpass ]; then
 fi
 
 # Let's move onto the "optimize" script:
-touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
-cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
 # Let's optimize the database and log to the monthly log file if the optimization is successful.
 /usr/pgsql-9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
 /usr/pgsql-9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
-echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # Now each individual shell script needs to have their permissions set properly for systemd to read and execute the scripts, so let's use 755:
-chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
-chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+chmod 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+chmod 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 
 # With both shell scripts created with the proper permissions, we can create, load, and start the systemd services and timers.
 
@@ -98,7 +98,7 @@ Description=Backup of $dbname DaVinci Resolve PostgreSQL database
 
 [Service]
 Type=oneshot
-ExecStart=~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh
+ExecStart=/usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-$dbname.sh
 EOF
 
 touch /etc/systemd/system/backup-"$dbname".timer
@@ -124,7 +124,7 @@ Description=Optimize $dbname DaVinci Resolve PostgreSQL database
 
 [Service]
 Type=oneshot
-ExecStart=~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh
+ExecStart=/usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-$dbname.sh
 EOF
 
 touch /etc/systemd/system/optimize-"$dbname".timer
@@ -158,5 +158,5 @@ systemctl start backup-"$dbname".timer
 systemctl start optimize-"$dbname".timer
 
 echo "Congratulations, $dbname will be backed up every "$backupFrequency" and optimized every "$optimizeFrequency"."
-echo "You can check to make sure that everything is being backed up and optimized properly by periodically looking at the log files in: ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs"
+echo "You can check to make sure that everything is being backed up and optimized properly by periodically looking at the log files in: /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs"
 echo "Have a great day!"
