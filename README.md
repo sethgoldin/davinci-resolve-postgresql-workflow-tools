@@ -54,7 +54,7 @@ The script creates `systemd` units and timers, so these automatic backups and au
 
 To verify that everything is in working order, you can periodically check the log files located in `/usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
 
-## System requirements:
+## System requirements
 
 ### macOS
 
