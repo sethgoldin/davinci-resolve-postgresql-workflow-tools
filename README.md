@@ -59,6 +59,7 @@ To verify that everything is in working order, you can periodically check the lo
 ### macOS
 
 * **macOS Sierra 10.12.6** (16G1036 or 16G1212) or **macOS High Sierra 10.13.4** (17E199)
+
 * PostgreSQL 9.5.4 or later (as provided by the DaVinci Resolve Studio installer)
 * pgAdmin III (as provided by the DaVinci Resolve Studio installer)
 

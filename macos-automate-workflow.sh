@@ -10,7 +10,7 @@ read -p "Is that correct? Enter y or n: " confirm && [[ $confirm == [yY] || $con
 # Now "$dbname" will work as a variable in subsequent paths.
 
 # Let's prompt the user for the "backup directory," which is where the backups from pg_dump will go:
-read -p "Into which directory should the database backups go? " backupDirectory
+read -p "Into which directory should the database backups go? You can drag-and-drop a folder from Finder into Terminal. " backupDirectory
 
 # Let's also allow the user to confirm that what they've typed in for the backup directory is correct:
 echo "You entered: $backupDirectory"
@@ -60,6 +60,9 @@ mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+
+# With a fresh installation of macOS, the ~/Library/LaunchAgents isn't automatically created, so let's check to make sure that it exists, and create it if it doesn't already:
+mkdir -p ~/Library/LaunchAgents
 
 # With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
