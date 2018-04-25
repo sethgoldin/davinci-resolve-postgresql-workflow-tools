@@ -64,8 +64,8 @@ To verify that everything is in working order, you can periodically check the lo
 
 ### CentOS
 
-CentOS 7.4
-PostgreSQL 9.5.12
+* CentOS 7.4
+* PostgreSQL 9.5.12
 	
 ## Background
 
