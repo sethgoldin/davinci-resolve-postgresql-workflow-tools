@@ -29,7 +29,7 @@ The script creates macOS `launchd` user agents, so these automatic backups and a
 To verify that everything is in working order, you can periodically check the log files located in `~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
 
 ## How to use on CentOS
-1. From a regular admin user account, download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
+1. From an admin user account [neither `root` nor `postgres`], download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
 2. In Terminal, from within your `~/Downloads` folder, execute the script:
 ```
 sudo ./centos-automate-workflow.sh
