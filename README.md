@@ -30,7 +30,11 @@ To verify that everything is in working order, you can periodically check the lo
 
 ## How to use on CentOS
 1. From an admin user account [neither `root` nor `postgres`], download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
-2. In Terminal, from within your `~/Downloads` folder, execute the script:
+2. In Terminal, from within your `~/Downloads` folder, make the script executable:
+```
+chmod 755 centos-automate-workflow.sh
+```
+3. Then, execute the script:
 ```
 sudo ./centos-automate-workflow.sh
 ```
@@ -40,9 +44,9 @@ The script will then:
 2. Prompt you for the path of the folder where your backups will go;
     - Be sure to use the absolute path
 3. Prompt you for how often you want to back the database up; and
-    - Be sure to use `systemd` notation like `1h` or `3h` or `1d`, etc.
+    - Be sure to use [`systemd` notation](https://www.freedesktop.org/software/systemd/man/systemd.time.html) like `1h` or `3h` or `1d`, etc.
 4. Prompt you for how often you want to optimize the database.
-    - Be sure to use `systemd` notation like `1h` or `3h` or `1d`, etc.
+    - Be sure to use [`systemd` notation](https://www.freedesktop.org/software/systemd/man/systemd.time.html) like `1h` or `3h` or `1d`, etc.
 
 Once you run through this script, you will be automatically backing up and optimizing your database according to whatever parameters you entered.
 
