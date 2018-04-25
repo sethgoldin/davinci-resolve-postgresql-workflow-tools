@@ -101,7 +101,7 @@ Because the script generates `launchd` user agents, the backups and optimization
 
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The `pg_hba.conf` file needs to have the following three lines, uncommented:
+The `pg_hba.conf` file needs the following lines to use `trust` authentication:
 ```
 local   all     all                      trust
 host    all     all     127.0.0.1/32     trust
