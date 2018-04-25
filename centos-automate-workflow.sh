@@ -70,7 +70,7 @@ cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-
 #!/bin/bash
 # Let's perform the backup and log to the monthly log file if the backup is successful.
 /usr/pgsql-9.5/bin/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
-echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "${backupDirectory}"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into \"${backupDirectory}\"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
