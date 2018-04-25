@@ -80,7 +80,7 @@ The core insights from his 2014 article still apply, but several crucial changes
 
 On macOS, this script creates and installs all the files necessary to have `launchd` regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. [`launchd`](https://en.wikipedia.org/wiki/Launchd) is a a unified service-management framework that starts, stops, and manages daemons, applications, processes, and scripts in macOS.
 
-On CentOS Linux, this script creates and installs all the files necessary to have [`systemd`](https://en.wikipedia.org/wiki/Systemd) regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. After a reboot, the `systemd` timer for each separate database will be delayed by a random number of seconds, up to 180 seconds, so as to stagger the database utilities for optimal performance.
+On CentOS Linux, this script creates and installs all the files necessary to have [`systemd`](https://en.wikipedia.org/wiki/Systemd) regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. After a reboot, each `systemd` timer will be delayed by a random number of seconds, up to 180 seconds, so as to stagger the database utilities for optimal performance.
 
 ## Notes on configurations
 
