@@ -56,7 +56,7 @@ chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
-# With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
+# With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the systemd files.
 
 # First, let's create the "backup" shell script:
 touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
