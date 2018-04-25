@@ -48,15 +48,19 @@ mkdir -p /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 # Let's also make a folder for log files
 mkdir -p /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
-# Let's make sure a log file exists if it doesn't already
-touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date +%Y_%m).log
 
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
 chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
-chmod -R 755 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+chmod -R 777 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
-# With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the systemd files.
+# Let's make sure a log file exists if it doesn't already
+touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date +%Y_%m).log
+
+# Let's make sure that that log file can be read from and written to
+chmod 777 /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date +%Y_%m).log
+
+# Let's go ahead and create the two different shell scripts that will be executed by the systemd files.
 
 # First, let's create the "backup" shell script:
 touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
@@ -66,7 +70,7 @@ cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-
 #!/bin/bash
 # Let's perform the backup and log to the monthly log file if the backup is successful.
 /usr/pgsql-9.5/bin/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
-echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "${backupDirectory}"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
