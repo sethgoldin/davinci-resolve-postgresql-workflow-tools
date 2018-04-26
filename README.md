@@ -114,6 +114,15 @@ The script is designed to be run from a regular user account with admin privileg
 
 The `pg_dump` command used in this `bash` script is the equivalent of pressing the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate entire databases from one PostgreSQL server to another.
 
-These `*.backup` files can be easily restored via the Resolve GUI's database manager window. Just press the "Restore" button and select the `*.backup` file you wish to restore.
+In the event of a disk failure hosting the PostgreSQL database, the procedure to restore from these `*.backup` files to a new PostgreSQL server is as follows:
+1. Set up a new, totally fresh PostgreSQL server
+2. From a connected client, create a fresh PostgreSQL database on the server, naming your database whatever you want it to be named
+3. From a normal user acccount on the PostgreSQL server [not `root` or `postgres`], run the command:
+
+```pg_restore --host localhost --username postgres --single-transaction --clean --if-exists --dbname=<dbname> <full path to your backup file>```
+
+You might see some error messages when you run the `pg_restore` command, but they are harmless, [according to the PostgreSQL documentation](https://www.postgresql.org/docs/9.5/static/app-pgrestore.html).
+
+You need to create the database ahead of time, because the `pg_dump` command will fill the data from the backup file into the fresh, blank database.
 
 Enjoy!
