@@ -30,7 +30,7 @@ To verify that everything is in working order, you can periodically check the lo
 
 ## How to use on CentOS
 1. From an admin user account [neither `root` nor `postgres`], download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
-2. In Terminal, from within your `~/Downloads` folder, make the script executable:
+2. In Terminal, from within your `~/Downloads/davinci-resolve-postgresql-workflow-tools-master` folder, make the script executable:
 ```
 chmod 755 centos-automate-workflow.sh
 ```
