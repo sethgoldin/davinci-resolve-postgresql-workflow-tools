@@ -101,11 +101,9 @@ Because the script generates `launchd` user agents, the backups and optimization
 
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The `pg_hba.conf` file needs the following lines to use `trust` authentication:
+The `pg_hba.conf` file needs the following line for the local PostgreSQL access to use `trust` authentication:
 ```
 local   all     all                      trust
-host    all     all     127.0.0.1/32     trust
-host    all     all     ::1/128          trust
 ```
 
 The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
