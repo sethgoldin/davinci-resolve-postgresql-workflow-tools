@@ -156,7 +156,7 @@ chmod 755 /etc/systemd/system/optimize-"$dbname".service
 chmod 755 /etc/systemd/system/optimize-"$dbname".timer
 
 # Now, the "backup" and "optimize" scripts and systemd files are in place.
-# All we need to do is unmask the units, reload systemd, and start the timers.
+# All we need to do is enable and start the timers.
 
 systemctl daemon-reload
 systemctl enable backup-"$dbname".timer
