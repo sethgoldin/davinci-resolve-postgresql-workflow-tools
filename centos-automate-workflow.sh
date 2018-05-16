@@ -156,13 +156,15 @@ chmod 755 /etc/systemd/system/optimize-"$dbname".service
 chmod 755 /etc/systemd/system/optimize-"$dbname".timer
 
 # Now, the "backup" and "optimize" scripts and systemd files are in place.
-# All we need to do is unmask the units, reload systemd, and start the timers.
+# All we need to do is enable and start the timers.
 
-systemctl unmask backup-"$dbname".timer
-systemctl unmask optimize-"$dbname".timer
 systemctl daemon-reload
+systemctl enable backup-"$dbname".timer
+systemctl enable optimize-"$dbname".timer
 systemctl start backup-"$dbname".timer
 systemctl start optimize-"$dbname".timer
+
+# By the way, CentOS 7.4 is still shipping with systemd 219. systemd 220 introduced the "--now" flag, so once CentOS actually ships systemd 220 or later, this code should be revised with single a "systemctl --now enable" command, instead of separate "enable" and "start" commands.
 
 echo "Congratulations, $dbname will be backed up every "$backupFrequency" and optimized every "$optimizeFrequency"."
 echo "You can check to make sure that everything is being backed up and optimized properly by periodically looking at the log files in: /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs"
