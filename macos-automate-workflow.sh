@@ -45,35 +45,43 @@ read -p "How often would you like to optimize the database, in seconds? " optimi
 read -p "You entered that you want to optimize your database every $optimizeFrequency seconds. Is that correct? Enter y or n: " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
 # Let's check if a ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools folder exists, and if it doesn't, let's create one:
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools
+mkdir -p $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools
 
 # Let's also check to see if there are separate directories for "backup" and "optimize" scripts, and if they don't exist, let's create them.
 # We're making separate directories for the different kinds of scripts just to keep everything clean and organized.
 
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
+mkdir -p $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+mkdir -p $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 
 # Let's also make a folder for log files
-mkdir -p ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+mkdir -p $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
-chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
-chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
-chmod -R 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+chmod -R 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
+chmod -R 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
+chmod -R 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
 # With a fresh installation of macOS, the ~/Library/LaunchAgents isn't automatically created, so let's check to make sure that it exists, and create it if it doesn't already:
-mkdir -p ~/Library/LaunchAgents
+mkdir -p $HOME/Library/LaunchAgents
 
 # With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
 # First, let's create the "backup" shell script:
-touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+touch $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 
 # Now, let's fill it in:
-cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+cat << EOF > $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
+# Check to make sure that the log file exists
+touch $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log && \\
+
+# Make sure that the file can be written to
+chmod 777 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log && \\ 
+
 # Let's perform the backup and log to the monthly log file if the backup is successful.
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file "$backupDirectory"/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
+
+# Log to the log file
 echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
@@ -86,24 +94,32 @@ if [ ! -f ~/.pgpass ]; then
 fi
 
 # Let's move onto the "optimize" script:
-touch ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
-cat << EOF > ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+touch $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+cat << EOF > $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
 # Let's optimize the database and log to the monthly log file if the optimization is successful.
+
+# Check to make sure that the log file exists
+touch $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log && \\
+
+# Make sure that the file can be written to
+chmod 777 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log && \\ 
+
+# Perform the two "optimize" functions and log to the log file
 /Library/PostgreSQL/9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
 /Library/PostgreSQL/9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
 echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # Now each individual shell script needs to have their permissions set properly for launchd to read and execute the scripts, so let's use 755:
-chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
-chmod 755 ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
+chmod 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
+chmod 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 
 # With both shell scripts created with the proper permissions, we can create, load, and start the two different launchd user agents.
 
 # Let's create the "backup" agent first.
 touch ~/Library/LaunchAgents/backup-"$dbname".plist
-cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
+cat << EOF > $HOME/Library/LaunchAgents/backup-"$dbname".plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -119,8 +135,8 @@ cat << EOF > ~/Library/LaunchAgents/backup-"$dbname".plist
 EOF
 
 # Now let's create the "optimize" agent.
-touch ~/Library/LaunchAgents/optimize-"$dbname".plist
-cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
+touch $HOME/Library/LaunchAgents/optimize-"$dbname".plist
+cat << EOF > $HOME/Library/LaunchAgents/optimize-"$dbname".plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -136,18 +152,18 @@ cat << EOF > ~/Library/LaunchAgents/optimize-"$dbname".plist
 EOF
 
 # These plist files inside ~/Library/LaunchAgents each need permissions of 755.
-chmod 755 ~/Library/LaunchAgents/backup-"$dbname".plist
-chmod 755 ~/Library/LaunchAgents/optimize-"$dbname".plist
+chmod 755 $HOME/Library/LaunchAgents/backup-"$dbname".plist
+chmod 755 $HOME/Library/LaunchAgents/optimize-"$dbname".plist
 
 # Now, the "backup" and "optimize" scripts and agents are in place.
 # All we need to do is load these agents into launchd and start them with launchctl.
 
 # First, let's load and start the backup agent.
-launchctl load ~/Library/LaunchAgents/backup-${dbname}.plist
+launchctl load $HOME/Library/LaunchAgents/backup-${dbname}.plist
 launchctl start com.resolve.backup.${dbname}
 
 # Lastly, let's load and start the optimize agent.
-launchctl load ~/Library/LaunchAgents/optimize-${dbname}.plist
+launchctl load $HOME/Library/LaunchAgents/optimize-${dbname}.plist
 launchctl start com.resolve.optimize.${dbname}
 
 echo "Congratulations, $dbname will be backed up every $backupFrequency seconds and optimized every $optimizeFrequency seconds."
