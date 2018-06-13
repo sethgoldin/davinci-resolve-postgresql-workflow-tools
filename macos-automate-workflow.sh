@@ -59,7 +59,7 @@ mkdir -p $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
 chmod -R 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
-chmod -R 755 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+chmod -R 777 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
 # With a fresh installation of macOS, the ~/Library/LaunchAgents isn't automatically created, so let's check to make sure that it exists, and create it if it doesn't already:
 mkdir -p $HOME/Library/LaunchAgents
@@ -82,7 +82,7 @@ chmod 777 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y
 /Library/PostgreSQL/9.5/pgAdmin3.app/Contents/SharedSupport/pg_dump --host localhost --username postgres $dbname --blobs --file "$backupDirectory"/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
 
 # Log to the log file
-echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
@@ -108,7 +108,7 @@ chmod 777 $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y
 # Perform the two "optimize" functions and log to the log file
 /Library/PostgreSQL/9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
 /Library/PostgreSQL/9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
-echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> ~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> $HOME/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # Now each individual shell script needs to have their permissions set properly for launchd to read and execute the scripts, so let's use 755:
