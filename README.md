@@ -83,15 +83,22 @@ On macOS, this script creates and installs all the files necessary to have `laun
 
 On CentOS Linux, this script creates and installs all the files necessary to have [`systemd`](https://en.wikipedia.org/wiki/Systemd) regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. After a reboot, each `systemd` timer will be delayed by a random number of seconds, up to 180 seconds, so as to stagger the database utilities for optimal performance.
 
-## Notes on configurations
-
-The `.pgpass` file assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
-
-Make sure that you create the directory where your backups are going to go *before* running the script.
+## Configuration
 
 ### macOS
 
+The `.pgpass` file that the script creates assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
+
+Make sure that you create the directory where your backups are going to go *before* running the script.
+
 If you have any spaces in the full path of the directory where your backups are going, be sure to escape them with `\` when you run the script.
+
+The `pg_hba.conf` file should be configured so that that these three lines use the `trust` method of authentication:
+```
+local    all    all    trust
+host    all    all    127.0.0.1/32    trust
+host    all    all    ::1/128    trust
+```
 
 The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
 
@@ -99,11 +106,15 @@ Because the script generates `launchd` user agents, the backups and optimization
 
 ### CentOS
 
+The `.pgpass` file that the script creates assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
+
+Make sure that you create the directory where your backups are going to go *before* running the script.
+
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The `pg_hba.conf` file needs the following line for the local PostgreSQL access to use `trust` authentication:
+The `pg_hba.conf` file should be configured so that the line for `local` uses`trust` authentication:
 ```
-local   all     all                      trust
+local    all    all        trust
 ```
 
 The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
