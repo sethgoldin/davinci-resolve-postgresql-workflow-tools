@@ -134,4 +134,26 @@ You might see some error messages when you run the `pg_restore` command, but the
 
 You need to create the database ahead of time, because the `pg_dump` command will fill the data from the backup file into the fresh, blank database.
 
-Enjoy!
+## Uninstall
+
+### Uninstall on macOS
+
+If you wish to stop automatically backing up and optimizing a particular database, you can run `macos-uninstall.sh`:
+
+```
+chmod 755 macos-uninstall.sh
+sudo ./macos-uninstall.sh
+```
+
+The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself will remain untouched.
+
+### Uninstall on CentOS
+
+If you wish to stop automatically backing up and optimizing a particular database, you can run `centos-uninstall.sh`:
+
+```
+chmod 755 centos-uninstall.sh
+sudo ./centos-uninstall.sh
+```
+
+The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself will remain untouched.
