@@ -100,6 +100,8 @@ host    all    all    127.0.0.1/32    trust
 host    all    all    ::1/128    trust
 ```
 
+N.B. Running the GUI app **DaVinci Resolve Project Server** somehow seems to change the authentication method back to `md5`. The scripts might continue to run, but because they'll be throwing errors, the logging won't be accurate. As a workaround, *don't open this GUI app,* or you'll have to go back to the `pg_hba.conf` file and manually change these lines back to `trust` again.
+
 The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
 
 Because the script generates `launchd` user agents, the backups and optimizations will only occur while logged into the same account from which the script was run. Stay logged into the same account.
