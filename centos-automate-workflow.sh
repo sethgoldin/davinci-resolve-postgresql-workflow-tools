@@ -74,11 +74,11 @@ echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into \"${backupDirec
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
-if [ ! -f /home/$USER/.pgpass ]; then
-	touch /home/$USER/.pgpass
-	echo "localhost:5432:*:postgres:DaVinci" > /home/$USER/.pgpass
+if [ ! -f $HOME/.pgpass ]; then
+	touch $HOME/.pgpass
+	echo "localhost:5432:*:postgres:DaVinci" > $HOME/.pgpass
 # 	We also need to make sure that that .pgpass file has the correct permissions of 0600:
-	chmod 0600 /home/$USER/.pgpass
+	chmod 0600 $HOME/.pgpass
 fi
 
 # Let's move onto the "optimize" script:
