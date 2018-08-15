@@ -1,9 +1,15 @@
 # DaVinci Resolve PostgreSQL Workflow Tools
-## Effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve 14 Studio's PostgreSQL databases
+## Effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve Studio's PostgreSQL databases
 
-This is a `bash` script that is designed to be run on a **Mac** or **Linux** system that's running as a PostgreSQL server for DaVinci Resolve 14 Studio.
+Here are some workflow tools designed for **Mac** or **Linux** systems that are running as PostgreSQL servers for DaVinci Resolve Studio.
 
-On macOS, the script will let you effortlessly create, load, and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases. On CentOS Linux, the script creates and starts `systemd` units and timers.
+This repository includes:
+* For macOS:
+	* A `bash` script that will let you effortlessly create, load, and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL databases
+	* A `bash` script to *uninstall* the above tools
+* For CentOS Linux:
+	* A `bash` script for CentOS Linux that will let you effortlessly create and start `systemd` units and timers that will automatically backup and automatically optimize your PostgreSQL databases
+	* A `bash` script to *uninstall* the above tools
 
 ## How to use on macOS
 1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
@@ -56,21 +62,22 @@ To verify that everything is in working order, you can periodically check the lo
 
 ## System requirements
 
+This script has been tested and works for PostgreSQL servers for either DaVinci Resolve Studio 14 or DaVinci Resolve Studio 15.
+
 ### macOS
 
-* **macOS Sierra 10.12.6** (16G1036 or 16G1212) or **macOS High Sierra 10.13.4** (17E199)
-
+* macOS Sierra 10.12.6 or later
 * PostgreSQL 9.5.4 or later (as provided by the DaVinci Resolve Studio installer)
 * pgAdmin III (as provided by the DaVinci Resolve Studio installer)
 
 ### CentOS
 
-* CentOS 7.4
-* PostgreSQL 9.5.12
-	
+* CentOS 7.3 or later
+* PostgreSQL 9.5.4 or later
+
 ## Background
 
-Jathavan Sriram wrote [a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use pgAdmin III tools in `bash`, instead of having to use the `psql` shell.
+Jathavan Sriram [wrote a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use pgAdmin III tools in `bash`, instead of having to use the `psql` shell.
 
 The core insights from his 2014 article still apply, but several crucial changes need to be made for modern systems:
 1. Apple [deprecated `cron` in favor of `launchd`](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html). 
@@ -79,15 +86,15 @@ The core insights from his 2014 article still apply, but several crucial changes
 
 ## What this script does
 
-On macOS, this script creates and installs all the files necessary to have `launchd` regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. [`launchd`](https://en.wikipedia.org/wiki/Launchd) is a a unified service-management framework that starts, stops, and manages daemons, applications, processes, and scripts in macOS.
+On macOS, this script creates and installs `bash` scripts and `launchd` agents that, together, regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses.
 
-On CentOS Linux, this script creates and installs all the files necessary to have [`systemd`](https://en.wikipedia.org/wiki/Systemd) regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. After a reboot, each `systemd` timer will be delayed by a random number of seconds, up to 180 seconds, so as to stagger the database utilities for optimal performance.
+On CentOS Linux, this script creates and installs `bash` scripts, `systemd` units, and `systemd` timers that, together, regularly and automatically backup and optimize the PostgreSQL databases that DaVinci Resolve Studio uses. After a reboot, each `systemd` timer will be delayed by a random number of seconds, up to 180 seconds, so as to stagger the database utilities for optimal performance.
 
 ## Configuration
 
 ### macOS
 
-The `.pgpass` file that the script creates assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
+The `.pgpass` file that the script creates assumes that the password for your PostgreSQL database is `DaVinci`, which is a convention from Blackmagic Design.
 
 Make sure that you create the directory where your backups are going to go *before* running the script.
 
@@ -102,24 +109,24 @@ host    all    all    ::1/128    trust
 
 N.B. Running the GUI app **DaVinci Resolve Project Server** somehow seems to change the authentication method back to `md5`. The scripts might continue to run, but because they'll be throwing errors, the logging won't be accurate. As a workaround, *don't open this GUI app,* or you'll have to go back to the `pg_hba.conf` file and manually change these lines back to `trust` again.
 
-The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
+The script should be run from a regular user account with admin privileges. Do not run this script from either the `root` or `postgres` user accounts.
 
 Because the script generates `launchd` user agents, the backups and optimizations will only occur while logged into the same account from which the script was run. Stay logged into the same account.
 
 ### CentOS
 
-The `.pgpass` file that the script creates assumes that the password for your PostgreSQL database is `DaVinci` as per the recommendation from the Resolve 14 manual.
+The `.pgpass` file that the script creates assumes that the password for your PostgreSQL database is `DaVinci`, which is a convention from Blackmagic Design.
 
 Make sure that you create the directory where your backups are going to go *before* running the script.
 
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The `pg_hba.conf` file should be configured so that the line for `local` uses`trust` authentication:
+The `pg_hba.conf` file should be configured so that the line for `local` uses `trust` authentication:
 ```
 local    all    all        trust
 ```
 
-The script is designed to be run from a regular user account with admin privileges. It's neither necessary nor desirable to run this script from within either the `root` or `postgres` user accounts.
+The script should be run from a regular user account with admin privileges. Do not run this script from either the `root` or `postgres` user accounts.
 
 ## Restoring from backup
 
