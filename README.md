@@ -130,18 +130,24 @@ The script should be run from a regular user account with admin privileges. Do n
 
 ## Restoring from backup
 
-The `pg_dump` command used in this `bash` script is the equivalent of pressing the "Backup" button in the Resolve GUI's database manager window. The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate entire databases from one PostgreSQL server to another.
+The `*.backup` files that this script generates can be restored into a new, totally blank PostgreSQL database in the event of a disk failure. These `*.backup` files are also handy even just to migrate entire databases from one PostgreSQL server to another.
 
 In the event of a disk failure hosting the PostgreSQL database, the procedure to restore from these `*.backup` files to a new PostgreSQL server is as follows:
 1. Set up a new, totally fresh PostgreSQL server
-2. From a connected client, create a fresh PostgreSQL database on the server, naming your database whatever you want it to be named
+2. Create a fresh PostgreSQL database on the server, naming your database whatever you want it to be named
+	1. If the version of Resolve you're using is the same version you were using when the `*.backup` file was created, you can just connect your client workstation and create a new blank database via the GUI;
+	2. But if your `*.backup` file was created for some earlier version of Resolve, you'll need to hop into the `postgres` superuser account and create a _completely blank_ database:
+		```
+		sudo su - postgres
+		createdb <newdatabasename>
+		```
 3. From a normal user acccount on the PostgreSQL server [not `root` or `postgres`], run the command:
+	```
+	pg_restore --host localhost --username postgres --single-transaction --clean --if-exists --dbname=<dbname> <full path to your backup file>
+	```
+	You might see some error messages when you run the `pg_restore` command, but they are harmless, [according to the PostgreSQL documentation](https://www.postgresql.org/docs/9.5/static/app-pgrestore.html).
 
-```pg_restore --host localhost --username postgres --single-transaction --clean --if-exists --dbname=<dbname> <full path to your backup file>```
-
-You might see some error messages when you run the `pg_restore` command, but they are harmless, [according to the PostgreSQL documentation](https://www.postgresql.org/docs/9.5/static/app-pgrestore.html).
-
-You need to create the database ahead of time, because the `pg_dump` command will fill the data from the backup file into the fresh, blank database.
+4. If the version of Resolve you're using is the same version you were using when the `*.backup` file was created, you should be good to go, but if your `*.backup` file was created for some earlier version of Resolve, you should now be able to connect the the database via the GUI on the client and then upgrade it for your current version.
 
 ## Uninstall
 
