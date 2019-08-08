@@ -15,11 +15,11 @@ This repository includes:
 1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
 2. In Terminal, execute the following command to run the script:
 ```
-~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-automate-workflow.sh
+~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-install.sh
 ```
 If you run into a permissions error, change the permissions on the file by running the following command first:
 ```
-chmod 755 ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-automate-workflow.sh
+chmod 755 ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-install.sh
 ```
 
 The script will then:
@@ -38,11 +38,11 @@ To verify that everything is in working order, you can periodically check the lo
 1. From an admin user account [neither `root` nor `postgres`], download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
 2. In Terminal, from within your `~/Downloads/davinci-resolve-postgresql-workflow-tools-master` folder, make the script executable:
 ```
-chmod 755 centos-automate-workflow.sh
+chmod 755 centos-install.sh
 ```
 3. Then, execute the script:
 ```
-sudo ./centos-automate-workflow.sh
+sudo ./centos-install.sh
 ```
 
 The script will then:
