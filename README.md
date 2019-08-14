@@ -121,9 +121,11 @@ Make sure that you create the directory where your backups are going to go *befo
 
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The `pg_hba.conf` file should be configured so that the line for `local` uses `trust` authentication:
+The `pg_hba.conf` file should be configured so that that these three lines use the `trust` method of authentication:
 ```
-local    all    all        trust
+local    all    all    trust
+host    all    all    127.0.0.1/32    trust
+host    all    all    ::1/128    trust
 ```
 
 The script should be run from a regular user account with admin privileges. Do not run this script from either the `root` or `postgres` user accounts.
