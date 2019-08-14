@@ -62,7 +62,10 @@ To verify that everything is in working order, you can periodically check the lo
 
 ## System requirements
 
-This script has been tested and works for PostgreSQL servers for either DaVinci Resolve Studio 14 or DaVinci Resolve Studio 15.
+This script has been tested and works for PostgreSQL servers for:
+- DaVinci Resolve Studio 14
+- DaVinci Resolve Studio 15
+- DaVinci Resolve Studio 16
 
 ### macOS
 
