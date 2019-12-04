@@ -80,7 +80,7 @@ This script has been tested and works for PostgreSQL servers for:
 
 ## Background
 
-Jathavan Sriram [wrote a great article back in 2014](http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use pgAdmin III tools in `bash`, instead of having to use the `psql` shell.
+Jathavan Sriram [wrote a great article back in 2014](https://web.archive.org/web/20141204010929/http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use pgAdmin III tools in `bash`, instead of having to use the `psql` shell.
 
 The core insights from his 2014 article still apply, but several crucial changes need to be made for modern systems:
 1. Apple [deprecated `cron` in favor of `launchd`](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html). 
