@@ -1,7 +1,7 @@
 # DaVinci Resolve PostgreSQL Workflow Tools
 ## Effortlessly set up automatic backups and automatic optimizations of DaVinci Resolve Studio's PostgreSQL databases
 
-Here are some workflow tools designed for **Mac** or **Linux** systems that are running as PostgreSQL servers for DaVinci Resolve Studio.
+Here are some workflow tools designed for **macOS** or **Linux** systems that are running as PostgreSQL servers for DaVinci Resolve Studio.
 
 This repository includes:
 * For macOS:
@@ -15,11 +15,7 @@ This repository includes:
 1. Download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
 2. In Terminal, execute the following command to run the script:
 ```
-~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-install.sh
-```
-If you run into a permissions error, change the permissions on the file by running the following command first:
-```
-chmod 755 ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-install.sh
+% ~/Downloads/davinci-resolve-postgresql-workflow-tools-master/macos-install.sh
 ```
 
 The script will then:
@@ -34,15 +30,14 @@ The script creates macOS `launchd` user agents, so these automatic backups and a
 
 To verify that everything is in working order, you can periodically check the log files located in `~/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs`.
 
+### `zsh` vs. `bash`
+Starting in macOS Catalina, the default shell is `zsh`. However, these scripts' shebangs still specify the use of `bash`, which is still included in Catalina. The scripts do not use any incompatible word splitting or array indices, so the scripts should be easily converted to native `zsh` in future releases of macOS. For more information, see [Scripting OS X](https://scriptingosx.com/zsh/).
+
 ## How to use on CentOS
 1. From an admin user account [neither `root` nor `postgres`], download the repository `davinci-resolve-postgresql-workflow-tools-master` to your `~/Downloads` folder.
-2. In Terminal, from within your `~/Downloads/davinci-resolve-postgresql-workflow-tools-master` folder, make the script executable:
+2. In Terminal, from within your `~/Downloads/davinci-resolve-postgresql-workflow-tools-master` folder, execute the script:
 ```
-chmod 755 centos-install.sh
-```
-3. Then, execute the script:
-```
-sudo ./centos-install.sh
+$ sudo ./centos-install.sh
 ```
 
 The script will then:
@@ -71,7 +66,6 @@ This script has been tested and works for PostgreSQL servers for:
 
 * macOS Sierra 10.12.6 or later
 * PostgreSQL 9.5.4 or later (as provided by the DaVinci Resolve Studio installer)
-* pgAdmin III (as provided by the DaVinci Resolve Studio installer)
 
 ### CentOS
 
@@ -103,7 +97,7 @@ Make sure that you create the directory where your backups are going to go *befo
 
 If you have any spaces in the full path of the directory where your backups are going, be sure to escape them with `\` when you run the script.
 
-The `pg_hba.conf` file should be configured so that that these three lines use the `trust` method of authentication:
+When behind a properly configured network-wide firewall, `pg_hba.conf` file should be configured so that that these three lines use the `trust` method of authentication:
 ```
 local    all    all    trust
 host    all    all    127.0.0.1/32    trust
@@ -124,7 +118,7 @@ Make sure that you create the directory where your backups are going to go *befo
 
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The `pg_hba.conf` file should be configured so that that these three lines use the `trust` method of authentication:
+When behind a properly configured network-wide firewall, the `pg_hba.conf` file should be configured so that that these three lines use the `trust` method of authentication:
 ```
 local    all    all    trust
 host    all    all    127.0.0.1/32    trust
@@ -143,12 +137,12 @@ In the event of a disk failure hosting the PostgreSQL database, the procedure to
 	1. If the version of Resolve you're using is the same version you were using when the `*.backup` file was created, you can just connect your client workstation and create a new blank database via the GUI;
 	2. But if your `*.backup` file was created for some earlier version of Resolve, you'll need to hop into the `postgres` superuser account and create a _completely blank_ database:
 		```
-		sudo su - postgres
-		createdb <newdatabasename>
+		$ sudo su - postgres
+		$ createdb <newdatabasename>
 		```
-3. From a normal user acccount on the PostgreSQL server [not `root` or `postgres`], run the command:
+3. From a normal user acccount on the PostgreSQL server [not `root` nor `postgres`], run the command:
 	```
-	pg_restore --host localhost --username postgres --single-transaction --clean --if-exists --dbname=<dbname> <full path to your backup file>
+	$ pg_restore --host localhost --username postgres --single-transaction --clean --if-exists --dbname=<dbname> <full path to your backup file>
 	```
 	You might see some error messages when you run the `pg_restore` command, but they are harmless, [according to the PostgreSQL documentation](https://www.postgresql.org/docs/9.5/static/app-pgrestore.html).
 
@@ -161,8 +155,7 @@ In the event of a disk failure hosting the PostgreSQL database, the procedure to
 If you wish to stop automatically backing up and optimizing a particular database, you can run `macos-uninstall.sh`:
 
 ```
-chmod 755 macos-uninstall.sh
-sudo ./macos-uninstall.sh
+% sudo ./macos-uninstall.sh
 ```
 
 The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself will remain untouched.
@@ -172,8 +165,7 @@ The script will ask you what database you want to stop backing up and optimizing
 If you wish to stop automatically backing up and optimizing a particular database, you can run `centos-uninstall.sh`:
 
 ```
-chmod 755 centos-uninstall.sh
-sudo ./centos-uninstall.sh
+$ sudo ./centos-uninstall.sh
 ```
 
 The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself will remain untouched.
