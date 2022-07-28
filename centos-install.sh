@@ -2,6 +2,11 @@
 
 # Here's where the user is going to enter the Resolve database name, as it appears in the GUI:
 read -p "Enter the name of your DaVinci Resolve PostgreSQL database: " dbname
+echo "Checking existing PostgreSQL installations in the system..."
+echo "PostgreSQL versions found:"
+ls -d /usr/pgsql*
+echo "Default: $(which pg_dump)"
+read -p "Enter the PostgreSQL version. This is typically 9.x for DaVinci Resolve 17 and below, 13 or 14 for DaVinci Resolve 18 and above: " version
 
 # Let's allow the user to confirm that what they've typed in is correct:
 echo "You entered: $dbname"
@@ -69,7 +74,7 @@ touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbnam
 cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
 # Let's perform the backup and log to the monthly log file if the backup is successful.
-/usr/pgsql-9.5/bin/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
+/usr/pgsql-${version}/bin/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
 echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into \"${backupDirectory}\"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
@@ -86,8 +91,8 @@ touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$d
 cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
 # Let's optimize the database and log to the monthly log file if the optimization is successful.
-/usr/pgsql-9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
-/usr/pgsql-9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
+/usr/pgsql-${version}/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
+/usr/pgsql-${version}/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
 echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
