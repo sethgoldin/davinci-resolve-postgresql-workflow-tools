@@ -33,7 +33,7 @@ To verify that everything is in working order, you can periodically check the lo
 macOS Ventura's the default shell is `zsh`. However, these scripts' shebangs still specify the use of `bash`, which has still been included since the switch from back in macOS Catalina. The scripts do not use any incompatible word splitting or array indices, so the scripts should be easily converted to native `zsh` in future releases of macOS. For more information, see [Scripting OS X](https://scriptingosx.com/zsh/).
 
 ## How to use on Red Hat Enterprise Linux
-From an admin user account [neither `root` nor `postgres`], download the `enterprise-linux-install.sh` file and then execute the script:
+From an administrative user account, download the `enterprise-linux-install.sh` file and then execute the script:
 ```
 sudo sh enterprise-linux-install.sh
 ```
@@ -61,12 +61,12 @@ This script has been tested and works for PostgreSQL 13 servers for:
 ### macOS
 
 * macOS Ventura
-* PostgreSQL 13 included EnterpriseDB PostgreSQL 13, as included from Blackmagic Design's DaVinci Resolve Project Server app
+* EnterpriseDB PostgreSQL 13, as included from Blackmagic Design's DaVinci Resolve Project Server app
 
-### Red Hat Enterprise Linux or Rocky Linux
+### Red Hat Enterprise Linux
 
 * Red Hat Enterprise Linux 9
-* PostgreSQL 13 from RHEL's included DNF repository
+* PostgreSQL 13 from [RHEL's included DNF repository](https://www.postgresql.org/download/linux/redhat/)
 
 ## Background
 
@@ -93,7 +93,7 @@ Make sure that you create the directory where your backups are going to go *befo
 
 If you have any spaces in the full path of the directory where your backups are going, be sure to escape them with `\` when you run the script.
 
-The script can be run from any user so long as it's run with `sudo` so as to have `root` user permissions.
+The script can be run from any admin user so long as it's run with `sudo` so as to have `root` user permissions.
 
 Because the script generates `launchd` daemons, the backups and optimizations will occur if the machine is running, even without any user being logged in. 
 
@@ -105,7 +105,7 @@ Make sure that you create the directory where your backups are going to go *befo
 
 Be sure to use the absolute path for the directory into which the backups will go.
 
-The script can be run from any user so long as it's run with `sudo` so as to have `root` user permissions.
+The script can be run from any admin user so long as it's run with `sudo` so as to have `root` user permissions.
 
 ## Restoring from backup
 
@@ -115,12 +115,12 @@ In the event of a disk failure hosting the PostgreSQL database, the procedure to
 1. Set up a new, totally fresh PostgreSQL server
 2. Create a fresh PostgreSQL database on the server, naming your database whatever you want it to be named
 	1. If the version of Resolve you're using is the same version you were using when the `*.backup` file was created, you can just connect your client workstation and create a new blank database via the GUI;
-	2. But if your `*.backup` file was created for some earlier version of Resolve, you'll need to hop into the `postgres` account with `root` user permission and create a _completely blank_ database:
+	2. But if your `*.backup` file was created for some earlier version of Resolve, you'll need to become the `postgres` user with `root` permissions and create a _completely blank_ database:
 		```
 		$ sudo su - postgres
 		$ createdb <newdatabasename>
 		```
-3. From a normal user acccount on the PostgreSQL server [not `root` nor `postgres`], run the command:
+3. Run the command:
 	```
 	$ pg_restore --host localhost --username postgres --password --single-transaction --clean --if-exists --dbname=<dbname> <full path to your backup file>
 	```
