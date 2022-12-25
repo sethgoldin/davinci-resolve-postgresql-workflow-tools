@@ -30,7 +30,7 @@ The script creates macOS `launchd` daemons, so these automatic backups and autom
 To verify that everything is in working order, you can periodically check the log files located in `/Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/`.
 
 ### `zsh` vs. `bash`
-macOS Ventura's the default shell is `zsh`. However, these scripts' shebangs still specify the use of `bash`, which has still been included since the switch from back in macOS Catalina. The scripts do not use any incompatible word splitting or array indices, so the scripts should be easily converted to native `zsh` in future releases of macOS. For more information, see [Scripting OS X](https://scriptingosx.com/zsh/).
+macOS Ventura's default shell is `zsh`. However, these scripts' shebangs still specify the use of `bash`, which has still been included since the switch from back in macOS Catalina. The scripts do not use any incompatible word splitting or array indices, so the scripts should be easily converted to native `zsh` in future releases of macOS. For more information, see [Scripting OS X](https://scriptingosx.com/zsh/).
 
 ## How to use on Red Hat Enterprise Linux
 From an administrative user account, download the `enterprise-linux-install.sh` file and then execute the script:
