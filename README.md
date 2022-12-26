@@ -68,6 +68,10 @@ This script has been tested and works for PostgreSQL 13 servers for:
 * Red Hat Enterprise Linux 9
 * PostgreSQL 13 from [RHEL's included DNF repository](https://www.postgresql.org/download/linux/redhat/)
 
+## DaVinci Resolve 18 terminology for "Project Library"
+
+Beginning with DaVinci Resolve 18, the Project Manager window, as well as the Project Server GUI app refer to "project libraries." These are just individual PostgreSQL databases, referred to in previous versions of DaVinci Resolve as "databases." These scripts refer to the names of "databases" you want to back up and optimize.
+
 ## Background
 
 Jathavan Sriram [wrote a great article back in 2014](https://web.archive.org/web/20141204010929/http://jathavansriram.github.io/2014/04/20/davinci-resolve-how-to-backup-optimize/) about how to use pgAdmin III tools in `bash`, instead of having to use the `psql` shell.
