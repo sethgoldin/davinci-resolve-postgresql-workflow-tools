@@ -5,7 +5,7 @@ Here are some workflow tools designed for **macOS** or **Linux** systems that ar
 
 This repository includes:
 * For macOS Ventura:
-	* A `bash` script that will let you effortlessly create, load, and start `launchd` user agents that will automatically backup and automatically optimize your PostgreSQL 13 databases
+	* A `bash` script that will let you effortlessly create, load, and start `launchd` daemons that will automatically backup and automatically optimize your PostgreSQL 13 databases
 	* A `bash` script to *uninstall* the above tools
 * For Red Hat Enterprise Linux 9:
 	* A `bash` script that will let you effortlessly create and start `systemd` units and timers that will automatically backup and automatically optimize your PostgreSQL 13 databases
