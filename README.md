@@ -142,7 +142,7 @@ If you wish to stop automatically backing up and optimizing a particular databas
 sudo sh macos-uninstall.sh
 ```
 
-The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself will remain untouched.
+The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself, as well as the backup files that have already been generated, will remain untouched.
 
 ### Uninstall on Red Hat Enterprise Linux
 
@@ -152,4 +152,4 @@ If you wish to stop automatically backing up and optimizing a particular databas
 sudo sh enterprise-linux-uninstall.sh
 ```
 
-The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself will remain untouched.
+The script will ask you what database you want to stop backing up and optimizing. The database you specify will then stop being backed up, stop being optimized, and all relevant files will be safely and cleanly removed from your system. The database itself, as well as the backup files that have already been generated, will remain untouched.
