@@ -69,16 +69,16 @@ touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbnam
 cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup/backup-"$dbname".sh
 #!/bin/bash
 # Let's perform the backup and log to the monthly log file if the backup is successful.
-/usr/pgsql-9.5/bin/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
+/usr/pgsql-13/bin/pg_dump --host localhost --username postgres $dbname --blobs --file $backupDirectory/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
 echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into \"${backupDirectory}\"." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
 # To make sure that this backup script will run without a password, we need to add a .pgpass file to ~ if it doesn't already exist:
-if [ ! -f $HOME/.pgpass ]; then
-	touch $HOME/.pgpass
-	echo "localhost:5432:*:postgres:DaVinci" > $HOME/.pgpass
+if [ ! -f /root/.pgpass ]; then
+	touch /root/.pgpass
+	echo "localhost:5432:*:postgres:DaVinci" > /root/.pgpass
 # 	We also need to make sure that that .pgpass file has the correct permissions of 0600:
-	chmod 0600 $HOME/.pgpass
+	chmod 0600 /root/.pgpass
 fi
 
 # Let's move onto the "optimize" script:
@@ -86,8 +86,8 @@ touch /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$d
 cat << EOF > /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize/optimize-"$dbname".sh
 #!/bin/bash
 # Let's optimize the database and log to the monthly log file if the optimization is successful.
-/usr/pgsql-9.5/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
-/usr/pgsql-9.5/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
+/usr/pgsql-13/bin/reindexdb --host localhost --username postgres $dbname --no-password --echo && \\
+/usr/pgsql-13/bin/vacuumdb --analyze --host localhost --username postgres $dbname --verbose --no-password && \\
 echo "${dbname} was optimized at \$(date "+%Y_%m_%d_%H_%M")." >> /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
 EOF
 
@@ -159,12 +159,8 @@ chmod 755 /etc/systemd/system/optimize-"$dbname".timer
 # All we need to do is enable and start the timers.
 
 systemctl daemon-reload
-systemctl enable backup-"$dbname".timer
-systemctl enable optimize-"$dbname".timer
-systemctl start backup-"$dbname".timer
-systemctl start optimize-"$dbname".timer
-
-# By the way, CentOS 7.4 is still shipping with systemd 219. systemd 220 introduced the "--now" flag, so once CentOS actually ships systemd 220 or later, this code should be revised with single a "systemctl --now enable" command, instead of separate "enable" and "start" commands.
+systemctl enable --now backup-"$dbname".timer
+systemctl enable --now optimize-"$dbname".timer
 
 echo "Congratulations, $dbname will be backed up every "$backupFrequency" and optimized every "$optimizeFrequency"."
 echo "You can check to make sure that everything is being backed up and optimized properly by periodically looking at the log files in: /usr/local/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs"
