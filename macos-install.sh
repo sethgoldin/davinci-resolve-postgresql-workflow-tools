@@ -56,10 +56,14 @@ mkdir -p /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 # Let's also make a folder for log files
 mkdir -p /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
 
+# Let's now make a folder for fallback Db backups (in case of the primary backup location being unavailable)
+mkdir -p /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/fallback
+
 # We also need to make sure that these folders in which the scripts are living have the proper permissions to execute:
 chmod -R 755 /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/backup
 chmod -R 755 /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/optimize
 chmod -R 777 /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs
+chmod -R 755 /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/fallback
 
 # With all these folders created, with the correct permissions, we can go ahead and create the two different shell scripts that will be executed by the launchd XML files.
 
@@ -74,6 +78,18 @@ touch /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date 
 
 # Make sure that the file can be written to
 chmod 777 /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log && \\ 
+
+# Check if the file path exists and if we have write permissions on it
+if [ -d "$backupDirectory" ] && [ -w "$backupDirectory" ]; then
+  echo "The file path exists and we have write permissions on it. Do the regular backup step here"
+  /Library/PostgreSQL/13/bin/pg_dump --host localhost --username postgres $dbname --blobs --file "$backupDirectory"/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
+  echo "${dbname} was backed up at \$(date "+%Y_%m_%d_%H_%M") into "$backupDirectory"." >> /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-\$(date "+%Y_%m").log
+else
+  echo "The file path either does not exist or we do not have write permissions on it. Do the fail safe backup"
+  /Library/PostgreSQL/13/bin/pg_dump --host localhost --username postgres REsolve --blobs --file /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/fallback/${dbname}_$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \
+  echo "${dbname} was backed up at $(date "+%Y_%m_%d_%H_%M") into "/Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/fallback/"." >> /Users/Shared/DaVinci-Resolve-PostgreSQL-Workflow-Tools/logs/logs-$(date "+%Y_%m").log
+fi
+
 
 # Let's perform the backup and log to the monthly log file if the backup is successful.
 /Library/PostgreSQL/13/bin/pg_dump --host localhost --username postgres $dbname --blobs --file "$backupDirectory"/${dbname}_\$(date "+%Y_%m_%d_%H_%M").backup --format=custom --verbose --no-password && \\
