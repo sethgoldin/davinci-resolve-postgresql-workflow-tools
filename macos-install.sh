@@ -84,7 +84,7 @@ EOF
 
 # To make sure that this backup script will run from the root account without a password, we need to add a .pgpass file to /var/root if it doesn't already exist:
 if [ ! -f /var/root/.pgpass ]; then
-	touch /var/root.pgpass
+	touch /var/root/.pgpass
 	echo "localhost:5432:*:postgres:DaVinci" > /var/root/.pgpass
 # 	We also need to make sure that that .pgpass file has the correct permissions of 600:
 	chmod 600 /var/root/.pgpass
