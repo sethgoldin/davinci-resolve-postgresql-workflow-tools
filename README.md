@@ -65,8 +65,11 @@ This script has been tested and works for PostgreSQL 13 servers for:
 
 ### Red Hat Enterprise Linux
 
+
+* Red Hat Enterprise Linux 7
+* Red Hat Enterprise Linux 8
 * Red Hat Enterprise Linux 9
-* PostgreSQL 13 from [RHEL's included DNF repository](https://www.postgresql.org/download/linux/redhat/)
+* PostgreSQL 13 from the [PostgreSQL Yum Repository](https://www.postgresql.org/download/linux/redhat/)
 
 ## DaVinci Resolve 18 terminology for "Project Library"
 
